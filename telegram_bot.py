@@ -92,7 +92,7 @@ def main() -> None:
     application.add_handler(CommandHandler("volume", command))
 
     # Run the bot until the user presses Ctrl-C
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
