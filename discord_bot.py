@@ -37,9 +37,9 @@ async def on_message(message):
                 try:
                     info = fetch_api(tokenName, intent)
                     if intent=="Price" or intent =="TotalSupply" or intent=="Capitalization" or intent =="Volume":
-                        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}", str(info)) + " USD"
+                        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + " USD."
                     else:
-                        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}", str(info))
+                        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + "."
                     response_text = f"{answer}"
                     isSent = True
                     await channel.send(response_text)

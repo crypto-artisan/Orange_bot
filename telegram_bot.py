@@ -44,9 +44,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         intent = "Capitalization"
     info = fetch_api(tokenName, intent)
     if intent=="Price" or intent =="TotalSupply" or intent=="Capitalization" or intent =="Volume":
-        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}", str(info)) + " USD"
+        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + " USD."
     else:
-        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}", str(info))
+        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + "."
     response_text = f"{answer}"
     await update.message.reply_text(response_text)
 
@@ -63,9 +63,9 @@ async def command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         intent = "Capitalization"
     info = fetch_api(tokenName, intent)
     if intent=="Price" or intent =="TotalSupply" or intent=="Capitalization" or intent =="Volume":
-        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}", str(info)) + " USD"
+        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + " USD."
     else:
-        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}", str(info))
+        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + "."
     response_text = f"{answer}"
     await update.message.reply_text(response_text)
 
