@@ -1,5 +1,6 @@
 import logging
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.constants import ParseMode
 from telegram.ext import (
     Application,
     ContextTypes,
@@ -31,44 +32,71 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Respond according to the 'CryptoInfo' state
-    inputData = update.message.text.removeprefix("/")
-    inputData = inputData.replace("marketcap", "market cap").replace("totalsupply", "total supply").replace("fullname", "full name")
-    tokenName, intent, fulfillmentText = dialog_flow(inputData)
-    if intent == "Tradingvolume":
-        intent = "Volume"
-    if intent == "Totalsupply":
-        intent = "TotalSupply"
-    if intent == "Marketcapitalization":
-        intent = "Capitalization"
-    info = fetch_api(tokenName, intent)
-    if intent=="Price" or intent =="TotalSupply" or intent=="Capitalization" or intent =="Volume":
-        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + " USD."
-    else:
-        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + "."
-    response_text = f"{answer}"
-    await update.message.reply_text(response_text)
+    inputData = update.message.text.strip()
+    inputData = update.message.text
+    print("inputData", inputData)
+    if inputData.startswith("/orange"):
+        inputData = update.message.text.removeprefix("/orange")
+        inputData = inputData.replace("marketcap", "market cap").replace("totalsupply", "total supply").replace("fullname", "full name")
+        tokenName, intent, fulfillmentText = dialog_flow(inputData)
+        if intent == "Tradingvolume":
+            intent = "Volume"
+        if intent == "Totalsupply":
+            intent = "TotalSupply"
+        if intent == "Marketcapitalization":
+            intent = "Capitalization"
+        info = fetch_api(tokenName, intent)
+        if intent=="Price" or intent =="TotalSupply" or intent=="Capitalization" or intent =="Volume":
+            answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + " USD."
+        else:
+            answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + "."
+        certification = "Powered by the Orange Assistant and made by Orange."
+        response_text = f"{answer}\n\n{certification}"
+        button1 = InlineKeyboardButton(text="🌎Website", url="https://www.orangecrypto.com/")
+        button2 = InlineKeyboardButton(text="📜Docs", url="https://docs.orangecrypto.com/")
 
-async def command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+        # Create the keyboard markup with the buttons
+        keyboard_markup = InlineKeyboardMarkup([
+            [button1, button2], # This is a row with two buttons
+        ])
+        await update.message.reply_html(response_text, reply_markup=keyboard_markup)
+    else:
+        pass
+
+async def command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Respond according to the 'CryptoInfo' state
-    inputData = update.message.text.removeprefix("/")
-    inputData = inputData.replace("marketcap", "market cap").replace("totalsupply", "total supply").replace("fullname", "full name")
-    tokenName, intent, fulfillmentText = dialog_flow(inputData)
-    if intent == "Tradingvolume":
-        intent = "Volume"
-    if intent == "Totalsupply":
-        intent = "TotalSupply"
-    if intent == "Marketcapitalization":
-        intent = "Capitalization"
-    info = fetch_api(tokenName, intent)
-    if intent=="Price" or intent =="TotalSupply" or intent=="Capitalization" or intent =="Volume":
-        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + " USD."
-    else:
-        answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + "."
-    response_text = f"{answer}"
-    await update.message.reply_text(response_text)
+    inputData = update.message.text.strip()
+    inputData = update.message.text
+    print("inputData", inputData)
+    if inputData.startswith("/orange"):
+        inputData = update.message.text.removeprefix("/orange")
+        inputData = inputData.replace("marketcap", "market cap").replace("totalsupply", "total supply").replace("fullname", "full name")
+        tokenName, intent, fulfillmentText = dialog_flow(inputData)
+        if intent == "Tradingvolume":
+            intent = "Volume"
+        if intent == "Totalsupply":
+            intent = "TotalSupply"
+        if intent == "Marketcapitalization":
+            intent = "Capitalization"
+        info = fetch_api(tokenName, intent)
+        if intent=="Price" or intent =="TotalSupply" or intent=="Capitalization" or intent =="Volume":
+            answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + " USD."
+        else:
+            answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + "."
+        certification = "Powered by the Orange Assistant and made by Orange."
+        response_text = f"{answer}\n\n{certification}"
+        button1 = InlineKeyboardButton(text="🌎Website", url="https://www.orangecrypto.com/")
+        button2 = InlineKeyboardButton(text="📜Docs", url="https://docs.orangecrypto.com/")
 
+        # Create the keyboard markup with the buttons
+        keyboard_markup = InlineKeyboardMarkup([
+            [button1, button2], # This is a row with two buttons
+        ])
+        await update.message.reply_html(response_text, reply_markup=keyboard_markup)
+    else:
+        pass
 
 def main() -> None:
     """Run the bot."""
@@ -84,15 +112,15 @@ def main() -> None:
     )
 
     application.add_handler(MessageHandler(filters.Text and ~filters.COMMAND, start))
-    application.add_handler(CommandHandler("price", command))
-    application.add_handler(CommandHandler("marketcap", command))
-    application.add_handler(CommandHandler("totalsupply", command))
-    application.add_handler(CommandHandler("fullname", command))
-    application.add_handler(CommandHandler("symbol", command))
-    application.add_handler(CommandHandler("volume", command))
+    application.add_handler(CommandHandler("orange", command))
+    # application.add_handler(CommandHandler("marketcap", command))
+    # application.add_handler(CommandHandler("totalsupply", command))
+    # application.add_handler(CommandHandler("fullname", command))
+    # application.add_handler(CommandHandler("symbol", command))
+    # application.add_handler(CommandHandler("volume", command))
 
     # Run the bot until the user presses Ctrl-C
-    # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
