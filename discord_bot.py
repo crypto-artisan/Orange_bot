@@ -8,8 +8,7 @@ import dotenv
 dotenv.load_dotenv()
 
 TOKEN = os.getenv("DC_TOKEN")
-
-CHANNEL_ID = 1219314677142781952
+CHANNEL_ID = 1202305750425141342
 
 bot = commands.Bot(command_prefix='!', intents=Intents.all())
 isSent = False
@@ -19,11 +18,9 @@ isSent = False
 async def on_message(message):
     global isSent
     content = str(message.content)
-    print(content)
     if not isSent:
         inputData = content.removeprefix("/")
         inputData = inputData.replace("marketcap", "market cap").replace("totalsupply", "total supply").replace("fullname", "full name")
-
         tokenName, intent, fulfillmentText = dialog_flow(inputData)
         if intent == "Tradingvolume":
             intent = "Volume"
@@ -32,8 +29,7 @@ async def on_message(message):
         if intent == "Marketcapitalization":
             intent = "Capitalization"
         if tokenName:
-            channel = bot.get_channel(CHANNEL_ID)
-            if channel:
+            if message:
                 try:
                     info = fetch_api(tokenName, intent)
                     if intent=="Price" or intent =="TotalSupply" or intent=="Capitalization" or intent =="Volume":
@@ -42,7 +38,7 @@ async def on_message(message):
                         answer = fulfillmentText.replace("{" + f"Asset{intent}" + "}.", str(info)) + "."
                     response_text = f"{answer}"
                     isSent = True
-                    await channel.send(response_text)
+                    await message.channel.send(response_text)
                 except:
                     pass
             else:
