@@ -12,6 +12,7 @@ import asyncio
 import telegram.ext.filters as filters
 from dialog_flow  import dialog_flow
 from cmcApi import fetch_api
+from aiAnswer import generateAnswer
 
 import os
 import dotenv
@@ -32,6 +33,22 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
+async def get_gpt4_response(prompt):
+    """Placeholder function to get a response from GPT-4.
+    
+    This function should be replaced with actual code to send a request to the GPT-4 API
+    and return the generated response.
+    """
+    # Example: Simulate getting a response from GPT-4
+    answer = generateAnswer(prompt)
+    return f"{answer}"
+
+async def gpt(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_message = update.message.text
+    # Generate a response using GPT-4
+    response_text = await get_gpt4_response(user_message)
+    await update.message.reply_html(response_text)
+    
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Respond according to the 'CryptoInfo' state
     # inputData = update.message.text.strip()
@@ -113,6 +130,7 @@ def main() -> None:
 
     application.add_handler(MessageHandler(filters.Text and ~filters.COMMAND, start))
     application.add_handler(CommandHandler("orange", command))
+    application.add_handler(CommandHandler("gpt", gpt))
     # application.add_handler(CommandHandler("marketcap", command))
     # application.add_handler(CommandHandler("totalsupply", command))
     # application.add_handler(CommandHandler("fullname", command))
