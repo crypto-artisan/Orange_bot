@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Respond according to the 'CryptoInfo' state
-    inputData = update.message.text.strip()
+    # inputData = update.message.text.strip()
     inputData = update.message.text
     print("inputData", inputData)
     if inputData.startswith("/orange"):
@@ -67,7 +67,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Respond according to the 'CryptoInfo' state
-    inputData = update.message.text.strip()
+    # inputData = update.message.text.strip()
     inputData = update.message.text
     print("inputData", inputData)
     if inputData.startswith("/orange"):
